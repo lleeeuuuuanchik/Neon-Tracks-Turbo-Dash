@@ -15,6 +15,9 @@ html, body {
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   -webkit-user-select: none;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
 }
 
 #app {
@@ -31,8 +34,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   z-index: 1;
 }
 .screen.active {
@@ -170,13 +172,13 @@ html, body {
 }
 
 /* === Скролл === */
-.shop-layout::-webkit-scrollbar,
-.howto-card::-webkit-scrollbar,
-.menu-layout::-webkit-scrollbar { width: 3px; }
+.shop-tab-content::-webkit-scrollbar,
+.mode-cards::-webkit-scrollbar,
+.howto-card::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(129,140,248,0.4); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(103,232,249,0.6); }
-.shop-layout, .howto-card, .menu-layout {
+.shop-tab-content, .mode-cards, .howto-card {
   scrollbar-width: thin;
   scrollbar-color: rgba(129,140,248,0.4) transparent;
 }
@@ -185,19 +187,51 @@ html, body {
 .menu-layout {
   width: 100%;
   max-width: 420px;
-  padding: max(env(safe-area-inset-top, 12px), 12px) 16px max(env(safe-area-inset-bottom, 12px), 12px);
+  height: 100%;
+  padding: max(env(safe-area-inset-top, 8px), 8px) 16px max(env(safe-area-inset-bottom, 8px), 8px);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   position: relative;
   z-index: 1;
-  overflow-y: auto;
-  max-height: 100%;
+  overflow: hidden;
+  justify-content: center;
 }
 
 .menu-header {
   text-align: center;
   padding: 4px 0 2px;
+  flex-shrink: 0;
+}
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 14px;
+  border: 1px solid rgba(148, 163, 253, 0.3);
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.lang-toggle:hover,
+.lang-toggle:active {
+  border-color: rgba(148, 163, 253, 0.6);
+  background: rgba(15, 23, 42, 0.8);
+}
+.lang-flag {
+  font-size: 1rem;
+  line-height: 1;
+}
+.lang-code {
+  letter-spacing: 0.5px;
 }
 
 .game-title {
@@ -212,108 +246,92 @@ html, body {
   filter: drop-shadow(0 0 24px rgba(129, 140, 248, 0.5));
 }
 
-.game-subtitle {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.45);
-  font-weight: 600;
-  letter-spacing: 3.5px;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
 
 .menu-main-card {
-  padding: 16px 18px;
-}
-
-.menu-card-inner {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.menu-car-preview {
+  padding: 16px 18px 14px;
+  flex-shrink: 1;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 10px;
 }
 
-.menu-car-label {
-  font-size: 0.68rem;
-  color: rgba(255, 255, 255, 0.35);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-weight: 600;
-}
-
-.menu-car-image-wrap {
-  width: 72px;
-  height: 140px;
+.menu-car-showcase {
+  width: 64px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  flex-shrink: 0;
 }
 
 .car-glow-ring {
   position: absolute;
-  inset: -12px;
+  inset: -16px;
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(129,140,248,0.28) 0%, transparent 68%);
+  background: radial-gradient(ellipse, rgba(129,140,248,0.3) 0%, rgba(103,232,249,0.1) 40%, transparent 70%);
   animation: glow-pulse 2.4s ease-in-out infinite;
 }
 @keyframes glow-pulse {
   0%, 100% { opacity: 0.7; transform: scale(1); }
-  50%       { opacity: 1;   transform: scale(1.08); }
+  50%       { opacity: 1;   transform: scale(1.1); }
 }
 
-.menu-car-image-wrap img {
+.menu-car-showcase img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   image-rendering: pixelated;
   position: relative;
   z-index: 1;
-  filter: drop-shadow(0 4px 16px rgba(129, 140, 248, 0.6));
+  filter: drop-shadow(0 4px 20px rgba(129, 140, 248, 0.7));
 }
 
 .menu-car-name {
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 800;
   color: #67e8f9;
   text-align: center;
+  text-shadow: 0 0 12px rgba(103, 232, 249, 0.4);
+  letter-spacing: 0.5px;
 }
 
-.menu-car-stats {
+.menu-stats-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.menu-stat-chip {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-top: 4px;
-}
-
-.stat-row {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 3px;
+  padding: 8px 4px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.stat-label {
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 500;
-  white-space: nowrap;
+.menu-stat-chip-label {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
 }
 
-.stat-value {
-  font-size: 0.9rem;
-  font-weight: 700;
+.menu-stat-chip-value {
+  font-size: 1rem;
+  font-weight: 800;
   color: #fff;
 }
 
-.menu-level-badge {
+.menu-stat-chip-value.menu-level-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -336,6 +354,30 @@ html, body {
   color: #fbbf24;
 }
 
+.chip-coins {
+  border-color: rgba(251, 191, 36, 0.15);
+  background: rgba(251, 191, 36, 0.06);
+}
+
+.chip-record {
+  border-color: rgba(103, 232, 249, 0.15);
+  background: rgba(103, 232, 249, 0.06);
+}
+
+.menu-exp-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.menu-exp-label {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
 .stat-bar {
   flex: 1;
   height: 5px;
@@ -354,7 +396,10 @@ html, body {
 
 /* === Задания дня === */
 .menu-quests {
-  padding: 14px 16px;
+  padding: 10px 14px;
+  flex-shrink: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .menu-quests-header {
@@ -434,8 +479,9 @@ html, body {
 .menu-buttons {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   padding-top: 2px;
+  flex-shrink: 0;
 }
 
 .menu-btn-play {
@@ -474,7 +520,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .shop-header {
@@ -539,6 +585,10 @@ html, body {
   display: none;
   flex-direction: column;
   gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .shop-tab-content.active {
   display: flex;
@@ -773,12 +823,12 @@ html, body {
 .modes-layout {
   width: 100%;
   max-width: 420px;
+  height: 100%;
   padding: max(env(safe-area-inset-top, 16px), 16px) 16px max(env(safe-area-inset-bottom, 16px), 16px);
   display: flex;
   flex-direction: column;
   gap: 14px;
-  overflow-y: auto;
-  max-height: 100%;
+  overflow: hidden;
 }
 
 .modes-header {
@@ -796,7 +846,11 @@ html, body {
 .mode-cards {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .mode-card {
@@ -1034,6 +1088,7 @@ html, body {
   box-shadow: 0 0 30px rgba(129, 140, 248, 0.15), 0 0 60px rgba(103, 232, 249, 0.05);
   max-width: 100%;
   max-height: 100%;
+  touch-action: none;
 }
 
 .game-tutorial-overlay {
@@ -1100,6 +1155,7 @@ html, body {
   transition: transform 0.1s, background 0.15s;
   font-family: inherit;
   backdrop-filter: blur(8px);
+  touch-action: none;
 }
 .control-btn:active {
   transform: scale(0.9);
@@ -1149,6 +1205,7 @@ html, body {
   width: 100%;
   max-width: 380px;
   padding: max(env(safe-area-inset-top, 20px), 20px) 16px max(env(safe-area-inset-bottom, 16px), 16px);
+  overflow: hidden;
 }
 
 .gameover-card {
@@ -1245,7 +1302,12 @@ html, body {
     font-size: 1.8rem;
   }
   .menu-main-card {
-    padding: 14px;
+    padding: 10px 14px;
+    gap: 6px;
+  }
+  .menu-car-showcase {
+    width: 50px;
+    height: 90px;
   }
   .game-controls {
     padding: 4px 0 8px;
@@ -1366,4 +1428,109 @@ html, body {
   color: #67e8f9;
   font-weight: 700;
   margin-top: 2px;
+}
+
+/* === Кнопка паузы === */
+.btn-pause {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 380px;
+  padding: 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.12s, background 0.15s;
+  touch-action: none;
+}
+.btn-pause:active {
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.1);
+}
+.btn-pause-icon {
+  font-size: 12px;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+.btn-pause-label {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* === Экран паузы === */
+.pause-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 3, 20, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.pause-card {
+  padding: 32px 28px;
+  text-align: center;
+  min-width: 220px;
+}
+.pause-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #ff6b9d, #818cf8, #67e8f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.pause-card .btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.pause-card .btn:last-child {
+  margin-bottom: 0;
+}
+
+/* === Заглушка ориентации (ландшафт на мобильных) === */
+.rotate-placeholder {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #020314;
+  z-index: 99999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.rotate-icon {
+  font-size: 64px;
+  animation: rotate-wobble 2s ease-in-out infinite;
+}
+.rotate-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 0 20px;
+}
+@keyframes rotate-wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-30deg); }
+  75% { transform: rotate(30deg); }
+}
+
+@media (max-width: 932px) and (max-height: 500px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+  .rotate-placeholder {
+    display: flex;
+  }
+  #app {
+    display: none !important;
+  }
 }

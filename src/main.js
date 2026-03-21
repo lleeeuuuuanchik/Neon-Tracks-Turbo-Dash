@@ -7,6 +7,7 @@
   var _runCount = 0;
   var _lastArmorMax = -1;
   var _lastArmor = -1;
+  var _currentModeId = null;
   // Кэш DOM-элементов HUD (заполняется при старте игры)
   var _hudEls = null;
 
@@ -25,6 +26,50 @@
     }
   }
 
+  // === Пауза ===
+  function pauseGame() {
+    if (Game.state !== 'running') return;
+    Game.pause();
+    YandexSDK.gameplayStop();
+    var overlay = document.getElementById('pause-overlay');
+    if (overlay) overlay.style.display = 'flex';
+  }
+
+  function resumeGame() {
+    if (Game.state !== 'paused') return;
+    var overlay = document.getElementById('pause-overlay');
+    if (overlay) overlay.style.display = 'none';
+    Game.resume();
+    YandexSDK.gameplayStart();
+    if (_animFrameId) cancelAnimationFrame(_animFrameId);
+    _animFrameId = requestAnimationFrame(_gameLoop);
+  }
+
+  function quitToMenu() {
+    if (Game.state === 'paused') {
+      Game.resume();
+      Game.finishRun();
+    }
+    YandexSDK.gameplayStop();
+    var overlay = document.getElementById('pause-overlay');
+    if (overlay) overlay.style.display = 'none';
+    if (_animFrameId) {
+      cancelAnimationFrame(_animFrameId);
+      _animFrameId = null;
+    }
+    showScreen('screen-menu');
+    updateMenuUI();
+  }
+
+  // === Язык ===
+  function updateLangToggleUI() {
+    var flag = document.getElementById('lang-flag');
+    var code = document.getElementById('lang-code');
+    if (flag) flag.textContent = LANG._lang === 'ru' ? '🇷🇺' : '🇬🇧';
+    if (code) code.textContent = LANG._lang === 'ru' ? 'RU' : 'EN';
+    document.title = LANG.t('game_title');
+  }
+
   // === Меню ===
   function updateMenuUI() {
     var coins = Progress.get('coins');
@@ -36,7 +81,7 @@
     var elBest = document.getElementById('best-distance');
     if (elCoins) elCoins.textContent = coins;
     if (elLevel) elLevel.textContent = level;
-    if (elBest) elBest.textContent = bestDistance + ' м';
+    if (elBest) elBest.textContent = bestDistance + ' ' + LANG.t('meter');
 
     var selectedId = Progress.get('selectedCarId');
     var car = null;
@@ -51,7 +96,7 @@
     var img = document.getElementById('menu-car-image');
     var nameEl = document.getElementById('menu-car-name');
     if (img) img.src = car.sprite;
-    if (nameEl) nameEl.textContent = car.name;
+    if (nameEl) nameEl.textContent = LANG.carName(car.id);
 
     // Анимация машины на превью
     if (typeof gsap !== 'undefined' && img) {
@@ -88,9 +133,9 @@
         item.className = 'quest-item' + (q.completed ? ' quest-done' : '');
 
         var label = '';
-        if (q.type === 'distance') label = 'Проехать ' + q.target + ' м';
-        else if (q.type === 'nitro_uses') label = 'Нитро ' + q.target + ' раз';
-        else if (q.type === 'close_overtakes') label = 'Рискованных обгонов: ' + q.target;
+        if (q.type === 'distance') label = LANG.t('quest_distance', q.target);
+        else if (q.type === 'nitro_uses') label = LANG.t('quest_nitro', q.target);
+        else if (q.type === 'close_overtakes') label = LANG.t('quest_overtakes', q.target);
 
         var prog = Math.min(q.progress, q.target);
         var pct = Math.round((prog / q.target) * 100);
@@ -166,7 +211,7 @@
     if (!h) return;
 
     if (h.speed) h.speed.textContent = Math.round(Game.player.speed);
-    if (h.dist) h.dist.textContent = Math.round(Game.distance) + ' м';
+    if (h.dist) h.dist.textContent = Math.round(Game.distance) + ' ' + LANG.t('meter');
     if (h.coins) h.coins.textContent = Math.round(Game.coinsRun);
     if (h.overtakes) h.overtakes.textContent = Game.overtakes;
     if (h.combo) {
@@ -210,7 +255,7 @@
     if (h.fever) {
       if (Game.player && Game.player.feverMode) {
         h.fever.style.display = '';
-        h.fever.textContent = 'FEVER x2 (' + Math.ceil(Game.player.feverTimer) + 'с)';
+        h.fever.textContent = LANG.t('fever_hud', Math.ceil(Game.player.feverTimer));
       } else {
         h.fever.style.display = 'none';
       }
@@ -263,23 +308,23 @@
       var img = document.createElement('img');
       img.className = 'car-card-img';
       img.src = car.sprite;
-      img.alt = car.name;
+      img.alt = LANG.carName(car.id);
       card.appendChild(img);
 
       // Имя
       var name = document.createElement('div');
       name.className = 'car-card-name';
-      name.textContent = car.name;
+      name.textContent = LANG.carName(car.id);
       card.appendChild(name);
 
       // Статы-бары
       var statsDiv = document.createElement('div');
       statsDiv.className = 'car-card-stats';
       var statKeys = [
-        { key: 'speed', label: 'СКР', cls: 'stat-speed', max: 1.5 },
-        { key: 'acceleration', label: 'РАЗ', cls: 'stat-accel', max: 1.5 },
-        { key: 'handling', label: 'УПР', cls: 'stat-handling', max: 1.5 },
-        { key: 'armor', label: 'БРН', cls: 'stat-armor', max: 5 },
+        { key: 'speed', labelKey: 'stat_spd', cls: 'stat-speed', max: 1.5 },
+        { key: 'acceleration', labelKey: 'stat_acc', cls: 'stat-accel', max: 1.5 },
+        { key: 'handling', labelKey: 'stat_hnd', cls: 'stat-handling', max: 1.5 },
+        { key: 'armor', labelKey: 'stat_arm', cls: 'stat-armor', max: 5 },
       ];
       for (var s = 0; s < statKeys.length; s++) {
         var sk = statKeys[s];
@@ -287,7 +332,7 @@
         barRow.className = 'car-stat-bar';
         var lbl = document.createElement('span');
         lbl.className = 'car-stat-label';
-        lbl.textContent = sk.label;
+        lbl.textContent = LANG.t(sk.labelKey);
         var track = document.createElement('div');
         track.className = 'car-stat-track';
         var fill = document.createElement('div');
@@ -305,10 +350,10 @@
       btn.className = 'car-card-action';
       if (isSelected) {
         btn.className += ' action-selected';
-        btn.textContent = 'Выбрано';
+        btn.textContent = LANG.t('selected');
       } else if (isUnlocked) {
         btn.className += ' action-select';
-        btn.textContent = 'Выбрать';
+        btn.textContent = LANG.t('select');
         btn.setAttribute('data-car-id', car.id);
         btn.addEventListener('click', (function (carId) {
           return function (e) {
@@ -319,7 +364,7 @@
         })(car.id));
       } else if (Progress.get('coins') >= car.price) {
         btn.className += ' action-buy';
-        btn.textContent = car.price + ' монет';
+        btn.textContent = car.price + ' ' + LANG.t('coins_suffix');
         btn.addEventListener('click', (function (carId) {
           return function (e) {
             e.stopPropagation();
@@ -331,7 +376,7 @@
         })(car.id));
       } else {
         btn.className += ' action-locked';
-        btn.textContent = car.price + ' монет';
+        btn.textContent = car.price + ' ' + LANG.t('coins_suffix');
       }
       card.appendChild(btn);
       grid.appendChild(card);
@@ -349,7 +394,7 @@
     var imgEl = document.getElementById('upgrade-car-img');
     var nameEl = document.getElementById('upgrade-car-name');
     if (imgEl) imgEl.src = car.sprite;
-    if (nameEl) nameEl.textContent = car.name;
+    if (nameEl) nameEl.textContent = LANG.carName(car.id);
 
     var container = document.getElementById('upgrade-stats');
     if (!container) return;
@@ -372,10 +417,10 @@
       info.className = 'upgrade-stat-info';
       var nameDiv = document.createElement('div');
       nameDiv.className = 'upgrade-stat-name';
-      nameDiv.textContent = CONFIG.UPGRADES.statNames[stat];
+      nameDiv.textContent = LANG.t(stat);
       var levelDiv = document.createElement('div');
       levelDiv.className = 'upgrade-stat-level';
-      levelDiv.textContent = 'Уровень ' + level + ' / ' + maxLevel;
+      levelDiv.textContent = LANG.t('level_prefix') + ' ' + level + ' / ' + maxLevel;
       info.appendChild(nameDiv);
       info.appendChild(levelDiv);
 
@@ -392,12 +437,12 @@
       btn.className = 'upgrade-btn';
       if (level >= maxLevel) {
         btn.className += ' maxed';
-        btn.textContent = 'МАКС';
+        btn.textContent = LANG.t('max_level');
       } else if (coins < cost) {
         btn.className += ' too-expensive';
-        btn.textContent = cost + ' м.';
+        btn.textContent = cost + ' ' + LANG.t('cost_suffix');
       } else {
-        btn.textContent = cost + ' м.';
+        btn.textContent = cost + ' ' + LANG.t('cost_suffix');
         btn.addEventListener('click', (function (carId, statKey) {
           return function () {
             if (Progress.upgradeCarStat(carId, statKey)) {
@@ -454,13 +499,13 @@
       info.className = 'mode-card-info';
       var nameDiv = document.createElement('div');
       nameDiv.className = 'mode-card-name';
-      nameDiv.textContent = mode.name;
+      nameDiv.textContent = LANG.modeName(key);
       var descDiv = document.createElement('div');
       descDiv.className = 'mode-card-desc';
-      descDiv.textContent = mode.description;
+      descDiv.textContent = LANG.modeDesc(key);
       var lanesDiv = document.createElement('div');
       lanesDiv.className = 'mode-card-lanes';
-      lanesDiv.textContent = (mode.laneCount || CONFIG.LANE_COUNT) + ' полосы';
+      lanesDiv.textContent = (mode.laneCount || CONFIG.LANE_COUNT) + ' ' + LANG.t('lanes_suffix');
       info.appendChild(nameDiv);
       info.appendChild(descDiv);
       info.appendChild(lanesDiv);
@@ -469,7 +514,7 @@
       if (best) {
         var bestDiv = document.createElement('div');
         bestDiv.className = 'mode-card-best';
-        bestDiv.textContent = 'Рекорд: ' + best + ' м';
+        bestDiv.textContent = LANG.t('record_prefix') + ': ' + best + ' ' + LANG.t('meter');
         info.appendChild(bestDiv);
       }
 
@@ -483,7 +528,7 @@
       // GSAP hover-эффект на карточках режимов
       if (typeof gsap !== 'undefined') {
         card.addEventListener('mouseenter', function () {
-          gsap.to(this, { scale: 1.03, duration: 0.18, ease: 'power1.out' });
+          gsap.to(this, { scale: 0.97, duration: 0.18, ease: 'power1.out' });
         });
         card.addEventListener('mouseleave', function () {
           gsap.to(this, { scale: 1, duration: 0.2, ease: 'power1.out' });
@@ -509,7 +554,54 @@
     updateMenuUI();
 
     YandexSDK.init(function () {
+      LANG.setLang(YandexSDK.lang);
+      LANG.applyToDOM();
+      updateLangToggleUI();
+      updateMenuUI();
       YandexSDK.notifyReady();
+    });
+
+    // Переключатель языка
+    var btnLang = document.getElementById('btn-lang');
+    if (btnLang) {
+      btnLang.addEventListener('click', function () {
+        var next = LANG._lang === 'ru' ? 'en' : 'ru';
+        LANG.setLang(next);
+        LANG.applyToDOM();
+        updateLangToggleUI();
+        updateMenuUI();
+      });
+    }
+
+    // Предотвращение контекстного меню (требование Яндекс Игр)
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    });
+
+    // Предотвращение выделения при долгом нажатии на мобильных
+    document.addEventListener('selectstart', function (e) {
+      e.preventDefault();
+    });
+
+    // Блокировка pull-to-refresh и браузерной прокрутки (п. 1.10.2)
+    document.addEventListener('touchmove', function (e) {
+      // Разрешаем скролл только внутри элементов с собственной прокруткой
+      var t = e.target;
+      while (t && t !== document.body) {
+        var s = window.getComputedStyle(t);
+        if (s.overflowY === 'auto' || s.overflowY === 'scroll') {
+          return; // Разрешить — это внутренний скролл контента
+        }
+        t = t.parentElement;
+      }
+      e.preventDefault();
+    }, { passive: false });
+
+    // Пауза при сворачивании вкладки / переключении приложения (требование Яндекс Игр)
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden && Game.state === 'running') {
+        pauseGame();
+      }
     });
 
     // Кнопка «Старт» → выбор режима
@@ -585,6 +677,33 @@
       });
     }
 
+    // Кнопка паузы
+    var btnPause = document.getElementById('btn-pause');
+    if (btnPause) {
+      btnPause.addEventListener('click', function () {
+        pauseGame();
+      });
+      btnPause.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        pauseGame();
+      });
+    }
+
+    // Кнопки в меню паузы
+    var btnResume = document.getElementById('btn-resume');
+    if (btnResume) {
+      btnResume.addEventListener('click', function () {
+        resumeGame();
+      });
+    }
+
+    var btnQuit = document.getElementById('btn-quit');
+    if (btnQuit) {
+      btnQuit.addEventListener('click', function () {
+        quitToMenu();
+      });
+    }
+
     // Кнопки управления
     var btnLeft = document.getElementById('btn-left');
     var btnRight = document.getElementById('btn-right');
@@ -636,7 +755,7 @@
       btnBrake.addEventListener('mouseleave', function () { Game.setBrake(false); });
     }
 
-    // Rewarded video
+    // Rewarded video (с паузой при показе рекламы — требование Яндекс Игр)
     var btnRewarded = document.getElementById('btn-rewarded');
     if (btnRewarded) {
       btnRewarded.addEventListener('click', function () {
@@ -647,8 +766,11 @@
             Progress.addCoins(bonus);
             var block = document.getElementById('rewarded-block');
             if (block) block.style.display = 'none';
+            updateMenuUI();
           },
-          function () {}
+          function () {},
+          function () { YandexSDK.gameplayStop(); },
+          function () { YandexSDK.gameplayStart(); }
         );
       });
     }
@@ -665,6 +787,16 @@
 
     // Клавиатура
     window.addEventListener('keydown', function (e) {
+      // Escape — пауза/возобновление
+      if (e.code === 'Escape') {
+        if (Game.state === 'running') {
+          pauseGame();
+        } else if (Game.state === 'paused') {
+          resumeGame();
+        }
+        return;
+      }
+
       if (Game.state !== 'running') return;
       if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
         Game.changeLane('left');
@@ -705,7 +837,12 @@
     setupShopTabs();
   }
 
+  // Глобальная ссылка на игровой цикл для возобновления после паузы
+  var _gameLoop = null;
+
   function startGame(modeId) {
+    _currentModeId = modeId;
+
     showScreen('screen-game');
     Game.init();
     if (!Render.canvas) {
@@ -716,7 +853,15 @@
     var overlay = document.getElementById('hud-help');
     if (overlay) {
       overlay.style.display = Progress.get('seenTutorial') ? 'none' : 'flex';
+      var tutText = document.getElementById('tutorial-text');
+      if (tutText) {
+        tutText.textContent = LANG.t('tutorial_text') + '\n' + LANG.t('tutorial_controls');
+        tutText.style.whiteSpace = 'pre-line';
+      }
     }
+    var pauseOverlay = document.getElementById('pause-overlay');
+    if (pauseOverlay) pauseOverlay.style.display = 'none';
+
     if (_animFrameId) {
       cancelAnimationFrame(_animFrameId);
     }
@@ -726,25 +871,37 @@
     cacheHudElements();
     Game.startRun(modeId);
 
-    function loop(timestamp) {
+    // GameplayAPI.start() — обязательно для Яндекс Игр
+    YandexSDK.gameplayStart();
+
+    _gameLoop = function loop(timestamp) {
       Game.updateFrame(timestamp);
       Render.drawAll();
       updateHudUI();
 
       if (Game.state === 'running') {
         _animFrameId = requestAnimationFrame(loop);
+      } else if (Game.state === 'paused') {
+        // Пауза — не запрашиваем следующий кадр, цикл остановлен
+        return;
       } else if (Game.state === 'gameover') {
+        // GameplayAPI.stop() — обязательно для Яндекс Игр
+        YandexSDK.gameplayStop();
+
         var distance = Math.round(Game.distance);
         var coins = Math.round(Game.coinsRun + CONFIG.COINS_BASE_PER_RUN);
         Game._lastRewardCoins = coins;
         updateGameOverUI({ distance: distance, coins: coins, overtakes: Game.overtakes });
 
-        // Interstitial каждые 3 заезда
+        // Interstitial каждые 3 заезда (с паузой — требование Яндекс Игр)
         _runCount += 1;
         if (_runCount % 3 === 0) {
-          YandexSDK.showInterstitial(function () {
-            showScreen('screen-gameover');
-          });
+          YandexSDK.showInterstitial(
+            function () { YandexSDK.gameplayStop(); },
+            function () {
+              showScreen('screen-gameover');
+            }
+          );
         } else {
           showScreen('screen-gameover');
         }
@@ -753,8 +910,8 @@
         if (block) block.style.display = 'block';
         updateMenuUI();
       }
-    }
-    _animFrameId = requestAnimationFrame(loop);
+    };
+    _animFrameId = requestAnimationFrame(_gameLoop);
   }
 
   // Запуск

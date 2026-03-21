@@ -3,7 +3,7 @@
  */
 var Game = {
   // Состояние игры
-  state: 'menu', // menu | running | gameover
+  state: 'menu', // menu | running | paused | gameover
 
   // Режим
   mode: 'classic',
@@ -210,6 +210,17 @@ var Game = {
     this._computeRoadBounds();
     this._initLanes();
     this._initPlayerFromConfig();
+  },
+
+  pause: function () {
+    if (this.state !== 'running') return;
+    this.state = 'paused';
+  },
+
+  resume: function () {
+    if (this.state !== 'paused') return;
+    this.state = 'running';
+    this._lastTimestamp = 0;
   },
 
   updateFrame: function (timestamp) {

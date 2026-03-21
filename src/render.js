@@ -418,7 +418,7 @@ var Render = {
       ctx.font = 'bold ' + Math.round(9 * s) + 'px Inter,sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      ctx.fillText('-' + dmg + ' брн', ob.x, ob.y + h / 2 + 2 * s);
+      ctx.fillText('-' + dmg + ' ' + LANG.t('dmg_armor'), ob.x, ob.y + h / 2 + 2 * s);
     }
     ctx.shadowBlur = 0;
     ctx.restore();
@@ -462,7 +462,7 @@ var Render = {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('+', vx, vy);
-        pkLabel = '+Щит';
+        pkLabel = LANG.t('pickup_shield');
         pkLabelY = vy + r + 5 * s;
 
       } else if (pk.kind === 'nitro') {
@@ -487,7 +487,7 @@ var Render = {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('N', vx, vy);
-        pkLabel = '+Нитро';
+        pkLabel = LANG.t('pickup_nitro');
         pkLabelY = vy + rn + 5 * s;
 
       } else if (pk.kind === 'coin') {
@@ -508,7 +508,7 @@ var Render = {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('$', vx, vy);
-        pkLabel = '+Монеты';
+        pkLabel = LANG.t('pickup_coins');
         pkLabelY = vy + rc + 5 * s;
 
       } else if (pk.kind === 'magnet') {
@@ -542,7 +542,7 @@ var Render = {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('M', vx, vy);
-        pkLabel = '+Магнит 8с';
+        pkLabel = LANG.t('pickup_magnet');
         pkLabelY = vy + rm + 11 * s;
       }
 

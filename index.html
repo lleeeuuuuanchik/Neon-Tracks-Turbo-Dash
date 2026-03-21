@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Неоновые трассы: Турбо-рывок</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Neon Tracks: Turbo Dash</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -20,56 +20,54 @@
       <div class="menu-bg-particles" aria-hidden="true"></div>
       <div class="menu-layout">
         <header class="menu-header" id="menu-header">
-          <h1 class="game-title">Неоновые трассы</h1>
-          <p class="game-subtitle">Турбо-рывок</p>
+          <h1 class="game-title" data-i18n="game_title">Неоновые Трассы: Турбо-Рывок</h1>
         </header>
 
         <section class="menu-main-card glass-card" id="menu-main-card">
-          <div class="menu-card-inner">
-            <div class="menu-car-preview">
-              <div class="menu-car-label">Автомобиль</div>
-              <div class="menu-car-image-wrap" id="menu-car-wrap">
-                <div class="car-glow-ring"></div>
-                <img id="menu-car-image" src="assets/unlucky/cars/car_starter.png" alt="Машина" />
-              </div>
-              <div class="menu-car-name" id="menu-car-name">Неоновая тень</div>
+          <div class="menu-car-showcase" id="menu-car-wrap">
+            <div class="car-glow-ring"></div>
+            <img id="menu-car-image" src="assets/unlucky/cars/car_starter.png" data-i18n-alt="car_alt" alt="Машина" />
+          </div>
+          <div class="menu-car-name" id="menu-car-name"></div>
+          <div class="menu-stats-row">
+            <div class="menu-stat-chip">
+              <span class="menu-stat-chip-label" data-i18n="lvl">LVL</span>
+              <span class="menu-stat-chip-value menu-level-badge" id="player-level">1</span>
             </div>
-            <div class="menu-car-stats">
-              <div class="stat-row">
-                <span class="stat-label">Уровень</span>
-                <span class="menu-level-badge" id="player-level">1</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-label">Опыт</span>
-                <div class="stat-bar">
-                  <div class="stat-bar-fill" id="exp-bar"></div>
-                </div>
-              </div>
-              <div class="stat-row">
-                <span class="stat-label">Монеты</span>
-                <span class="stat-value coin-value" id="player-coins">0</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-label">Рекорд</span>
-                <span class="stat-value menu-record" id="best-distance">0 м</span>
-              </div>
+            <div class="menu-stat-chip chip-coins">
+              <span class="menu-stat-chip-label" data-i18n="coins">Монеты</span>
+              <span class="menu-stat-chip-value coin-value" id="player-coins">0</span>
+            </div>
+            <div class="menu-stat-chip chip-record">
+              <span class="menu-stat-chip-label" data-i18n="record">Рекорд</span>
+              <span class="menu-stat-chip-value menu-record" id="best-distance">0</span>
+            </div>
+          </div>
+          <div class="menu-exp-row">
+            <span class="menu-exp-label">EXP</span>
+            <div class="stat-bar">
+              <div class="stat-bar-fill" id="exp-bar"></div>
             </div>
           </div>
         </section>
 
         <section class="menu-quests glass-card" id="menu-quests-card">
           <div class="menu-quests-header">
-            <span class="menu-quests-title">Задания дня</span>
+            <span class="menu-quests-title" data-i18n="daily_quests">Задания дня</span>
           </div>
           <div class="menu-quests-list" id="daily-quests-list"></div>
         </section>
 
         <div class="menu-buttons" id="menu-buttons">
           <button class="btn btn-primary btn-large menu-btn-play" id="btn-play">
-            <span class="btn-play-icon">▶</span> Старт заезда
+            <span class="btn-play-icon">▶</span> <span data-i18n="start_race">Старт заезда</span>
           </button>
-          <button class="btn btn-secondary menu-btn-garage" id="btn-shop">Гараж</button>
-          <button class="btn btn-secondary" id="btn-howto">Как играть</button>
+          <button class="btn btn-secondary menu-btn-garage" id="btn-shop" data-i18n="garage">Гараж</button>
+          <button class="btn btn-secondary" id="btn-howto" data-i18n="how_to_play">Как играть</button>
+          <button class="lang-toggle" id="btn-lang" title="Language">
+            <span class="lang-flag" id="lang-flag">🇷🇺</span>
+            <span class="lang-code" id="lang-code">RU</span>
+          </button>
         </div>
       </div>
     </div>
@@ -79,7 +77,7 @@
       <div class="shop-layout">
         <header class="shop-header">
           <button class="btn-icon" id="btn-shop-back">&#8592;</button>
-          <h2 class="shop-title">Гараж</h2>
+          <h2 class="shop-title" data-i18n="garage">Гараж</h2>
           <div class="shop-coins">
             <span class="coin-icon"></span>
             <span id="shop-coins">0</span>
@@ -87,8 +85,8 @@
         </header>
 
         <div class="shop-tabs">
-          <button class="shop-tab active" data-tab="cars" id="tab-cars">Машины</button>
-          <button class="shop-tab" data-tab="upgrades" id="tab-upgrades">Улучшения</button>
+          <button class="shop-tab active" data-tab="cars" id="tab-cars" data-i18n="cars_tab">Машины</button>
+          <button class="shop-tab" data-tab="upgrades" id="tab-upgrades" data-i18n="upgrades_tab">Улучшения</button>
         </div>
 
         <div class="shop-tab-content active" id="shop-tab-cars">
@@ -112,7 +110,7 @@
       <div class="modes-layout">
         <header class="modes-header">
           <button class="btn-icon" id="btn-modes-back">&#8592;</button>
-          <h2 class="modes-title">Выбери режим</h2>
+          <h2 class="modes-title" data-i18n="choose_mode">Выбери режим</h2>
         </header>
         <div class="mode-cards" id="mode-cards"></div>
       </div>
@@ -124,40 +122,40 @@
         <div class="game-hud glass-card">
           <div class="hud-row">
             <div class="hud-block">
-              <div class="hud-label">Скорость</div>
+              <div class="hud-label" data-i18n="hud_speed">Скорость</div>
               <div class="hud-value" id="hud-speed">0</div>
             </div>
             <div class="hud-block">
-              <div class="hud-label">Дистанция</div>
-              <div class="hud-value" id="hud-distance">0 м</div>
+              <div class="hud-label" data-i18n="hud_distance">Дистанция</div>
+              <div class="hud-value" id="hud-distance">0</div>
             </div>
             <div class="hud-block">
-              <div class="hud-label">Монеты</div>
+              <div class="hud-label" data-i18n="hud_coins">Монеты</div>
               <div class="hud-value" id="hud-coins">0</div>
             </div>
             <div class="hud-block">
-              <div class="hud-label">Обгоны</div>
+              <div class="hud-label" data-i18n="hud_overtakes">Обгоны</div>
               <div class="hud-value" id="hud-overtakes">0</div>
             </div>
             <div class="hud-block">
-              <div class="hud-label">Комбо</div>
+              <div class="hud-label" data-i18n="hud_combo">Комбо</div>
               <div class="hud-value hud-combo" id="hud-combo">x1</div>
             </div>
           </div>
           <div class="hud-row hud-row-bars">
             <div class="hud-bar-group">
-              <div class="hud-bar-label">Нитро</div>
+              <div class="hud-bar-label" data-i18n="hud_nitro">Нитро</div>
               <div class="hud-nitro-bar">
                 <div class="hud-nitro-fill" id="hud-nitro-fill"></div>
               </div>
             </div>
             <div class="hud-bar-group">
-              <div class="hud-bar-label">Броня</div>
+              <div class="hud-bar-label" data-i18n="hud_armor">Броня</div>
               <div class="hud-armor" id="hud-armor"></div>
             </div>
           </div>
           <div class="hud-timer-row" id="hud-timer-row" style="display:none">
-            <span class="hud-timer-label">Время:</span>
+            <span class="hud-timer-label" data-i18n="hud_time">Время:</span>
             <span class="hud-timer-value" id="hud-timer">60</span>
           </div>
           <div class="hud-fever-row" id="hud-fever" style="display:none">FEVER x2</div>
@@ -167,28 +165,34 @@
           <canvas id="game-canvas" width="360" height="640"></canvas>
           <div class="game-tutorial-overlay" id="hud-help">
             <div class="tutorial-card">
-              <div class="tutorial-title">Быстрый старт</div>
-              <div class="tutorial-text">
-                Держи машину в потоке, объезжай трафик и препятствия.<br />
-                A / &#8592; — влево &nbsp; D / &#8594; — вправо<br />
-                W / &#9650; — газ &nbsp; S / &#9660; — тормоз<br />
-                Space / Нитро — суперускорение
-              </div>
-              <button class="btn btn-secondary tutorial-btn" id="btn-close-tutorial">
+              <div class="tutorial-title" data-i18n="tutorial_title">Быстрый старт</div>
+              <div class="tutorial-text" id="tutorial-text"></div>
+              <button class="btn btn-secondary tutorial-btn" id="btn-close-tutorial" data-i18n="tutorial_ok">
                 Понятно
               </button>
             </div>
           </div>
         </div>
 
-        <div class="game-help-text">
-          A/&#8592; влево &middot; D/&#8594; вправо &middot; W/&#9650; газ &middot; S/&#9660; тормоз &middot; Space нитро
+        <div class="game-help-text" id="game-help-text" data-i18n="help_line"></div>
+
+        <div class="pause-overlay" id="pause-overlay" style="display:none">
+          <div class="pause-card glass-card">
+            <div class="pause-title" data-i18n="pause">Пауза</div>
+            <button class="btn btn-primary" id="btn-resume" data-i18n="resume">Продолжить</button>
+            <button class="btn btn-secondary" id="btn-quit" data-i18n="quit_menu">В меню</button>
+          </div>
         </div>
+
+        <button class="btn-pause glass-card" id="btn-pause">
+          <span class="btn-pause-icon">❚❚</span>
+          <span class="btn-pause-label" data-i18n="pause">Пауза</span>
+        </button>
 
         <div class="game-controls">
           <button class="control-btn" id="btn-left">&#10094;</button>
           <button class="control-btn control-btn-gas" id="btn-gas">&#9650;</button>
-          <button class="control-btn control-btn-accent" id="btn-nitro">Нитро</button>
+          <button class="control-btn control-btn-accent" id="btn-nitro" data-i18n="nitro_btn">Нитро</button>
           <button class="control-btn control-btn-brake" id="btn-brake">&#9660;</button>
           <button class="control-btn" id="btn-right">&#10095;</button>
         </div>
@@ -199,31 +203,31 @@
     <div class="screen" id="screen-gameover">
       <div class="gameover-layout">
         <div class="gameover-card glass-card">
-          <h2 class="gameover-title">Заезд завершён</h2>
+          <h2 class="gameover-title" data-i18n="race_finished">Заезд завершён</h2>
           <div class="gameover-stats">
             <div class="gameover-stat">
-              <span class="gameover-stat-label">Дистанция</span>
+              <span class="gameover-stat-label" data-i18n="hud_distance">Дистанция</span>
               <span class="gameover-stat-value" id="final-distance">0</span>
-              <span class="gameover-stat-unit">м</span>
+              <span class="gameover-stat-unit" data-i18n="meter">м</span>
             </div>
             <div class="gameover-stat">
-              <span class="gameover-stat-label">Монеты</span>
+              <span class="gameover-stat-label" data-i18n="coins">Монеты</span>
               <span class="gameover-stat-value" id="final-coins">0</span>
             </div>
             <div class="gameover-stat">
-              <span class="gameover-stat-label">Обгоны</span>
+              <span class="gameover-stat-label" data-i18n="hud_overtakes">Обгоны</span>
               <span class="gameover-stat-value" id="final-overtakes">0</span>
             </div>
           </div>
 
           <div class="rewarded-block" id="rewarded-block">
-            <div class="rewarded-text">+50% монет за просмотр видео</div>
-            <button class="btn btn-accent btn-small" id="btn-rewarded">Получить бонус</button>
+            <div class="rewarded-text" data-i18n="rewarded_text">+50% монет за просмотр видео</div>
+            <button class="btn btn-accent btn-small" id="btn-rewarded" data-i18n="get_bonus">Получить бонус</button>
           </div>
 
           <div class="gameover-buttons">
-            <button class="btn btn-primary" id="btn-restart">Ещё заезд</button>
-            <button class="btn btn-secondary" id="btn-menu">В гараж</button>
+            <button class="btn btn-primary" id="btn-restart" data-i18n="race_again">Ещё заезд</button>
+            <button class="btn btn-secondary" id="btn-menu" data-i18n="to_garage">В гараж</button>
           </div>
         </div>
       </div>
@@ -233,188 +237,65 @@
     <div class="howto-overlay" id="howto-overlay" style="display:none">
       <div class="howto-card glass-card">
         <div class="howto-header">
-          <h2 class="howto-title">Как играть</h2>
+          <h2 class="howto-title" data-i18n="how_to_play">Как играть</h2>
           <button class="btn-icon" id="btn-howto-close">✕</button>
         </div>
         <div class="howto-body">
 
           <div class="howto-section">
-            <div class="howto-section-title">Управление</div>
-            <div class="howto-row">
-              <div class="howto-row-icon">⬅️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Влево</div>
-                <div class="howto-row-desc">A / ← или кнопка ‹ на экране</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">➡️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Вправо</div>
-                <div class="howto-row-desc">D / → или кнопка › на экране</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">⬆️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Газ</div>
-                <div class="howto-row-desc">W / ↑ или кнопка ▲ — ускорение</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">⬇️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Тормоз</div>
-                <div class="howto-row-desc">S / ↓ или кнопка ▼ — замедление</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🚀</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Нитро</div>
-                <div class="howto-row-desc">Space или кнопка «Нитро» — ×1.6 скорость пока заряд не кончится</div>
-              </div>
-            </div>
+            <div class="howto-section-title" data-i18n="howto_controls">Управление</div>
+            <div class="howto-row"><div class="howto-row-icon">⬅️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_left">Влево</div><div class="howto-row-desc" data-i18n="howto_left_desc">A / ← или кнопка ‹ на экране</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">➡️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_right">Вправо</div><div class="howto-row-desc" data-i18n="howto_right_desc">D / → или кнопка › на экране</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">⬆️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_gas">Газ</div><div class="howto-row-desc" data-i18n="howto_gas_desc">W / ↑ или кнопка ▲ — ускорение</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">⬇️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_brake">Тормоз</div><div class="howto-row-desc" data-i18n="howto_brake_desc">S / ↓ или кнопка ▼ — замедление</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🚀</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_nitro">Нитро</div><div class="howto-row-desc" data-i18n="howto_nitro_desc">Space или кнопка «Нитро» — ×1.6 скорость пока заряд не кончится</div></div></div>
           </div>
 
           <div class="howto-section">
-            <div class="howto-section-title">Препятствия</div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🚧</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Конус, бочка, барьер, шины</div>
-                <div class="howto-row-desc">Лёгкое препятствие</div>
-                <div class="howto-row-dmg">−1 броня</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🛢️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Масло, камень</div>
-                <div class="howto-row-desc">Тяжёлое препятствие — опасно!</div>
-                <div class="howto-row-dmg">−3 броня</div>
-              </div>
-            </div>
+            <div class="howto-section-title" data-i18n="howto_obstacles">Препятствия</div>
+            <div class="howto-row"><div class="howto-row-icon">🚧</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_light_name">Конус, бочка, барьер, шины</div><div class="howto-row-desc" data-i18n="howto_light_desc">Лёгкое препятствие</div><div class="howto-row-dmg" data-i18n="howto_light_dmg">−1 броня</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🛢️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_heavy_name">Масло, камень</div><div class="howto-row-desc" data-i18n="howto_heavy_desc">Тяжёлое препятствие — опасно!</div><div class="howto-row-dmg" data-i18n="howto_heavy_dmg">−3 броня</div></div></div>
           </div>
 
           <div class="howto-section">
-            <div class="howto-section-title">Плюшки</div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🛡️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Щит</div>
-                <div class="howto-row-desc">Восстанавливает броню до максимума</div>
-                <div class="howto-row-bonus">+Щит</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">⚡</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Нитро</div>
-                <div class="howto-row-desc">Полностью заполняет заряд нитро</div>
-                <div class="howto-row-bonus">+Нитро</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🪙</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Монеты</div>
-                <div class="howto-row-desc">Серия монет на дороге — собирай все подряд</div>
-                <div class="howto-row-bonus">+Монеты</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🧲</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Магнит</div>
-                <div class="howto-row-desc">8 секунд автоматически притягивает монеты в радиусе 100 пикселей</div>
-                <div class="howto-row-bonus">+Магнит 8с</div>
-              </div>
-            </div>
+            <div class="howto-section-title" data-i18n="howto_pickups">Плюшки</div>
+            <div class="howto-row"><div class="howto-row-icon">🛡️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_shield">Щит</div><div class="howto-row-desc" data-i18n="howto_shield_desc">Восстанавливает броню до максимума</div><div class="howto-row-bonus" data-i18n="howto_shield_bonus">+Щит</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">⚡</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_nitro_pickup">Нитро</div><div class="howto-row-desc" data-i18n="howto_nitro_pickup_desc">Полностью заполняет заряд нитро</div><div class="howto-row-bonus" data-i18n="howto_nitro_bonus">+Нитро</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🪙</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_coins">Монеты</div><div class="howto-row-desc" data-i18n="howto_coins_desc">Серия монет на дороге — собирай все подряд</div><div class="howto-row-bonus" data-i18n="howto_coins_bonus">+Монеты</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🧲</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_magnet">Магнит</div><div class="howto-row-desc" data-i18n="howto_magnet_desc">8 секунд автоматически притягивает монеты в радиусе 100 пикселей</div><div class="howto-row-bonus" data-i18n="howto_magnet_bonus">+Магнит 8с</div></div></div>
           </div>
 
           <div class="howto-section">
-            <div class="howto-section-title">Механики</div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🌀</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Дрифт</div>
-                <div class="howto-row-desc">Смени полосу удерживая тормоз — машина пойдёт в занос</div>
-                <div class="howto-row-bonus">+0.5 комбо-множитель</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🔥</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Fever Mode</div>
-                <div class="howto-row-desc">Совершай near-miss обгоны (пролетай рядом с машинами) 5 раз подряд</div>
-                <div class="howto-row-bonus">×2 монеты на 12 секунд</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">💨</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Слипстрим</div>
-                <div class="howto-row-desc">Езди вплотную за машиной — получаешь небольшое ускорение в потоке</div>
-                <div class="howto-row-bonus">×1.15 скорость</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">✖️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Комбо</div>
-                <div class="howto-row-desc">Обгоняй и дрифтуй без столкновений — растёт множитель монет</div>
-                <div class="howto-row-bonus">до ×5 монет</div>
-              </div>
-            </div>
+            <div class="howto-section-title" data-i18n="howto_mechanics">Механики</div>
+            <div class="howto-row"><div class="howto-row-icon">🌀</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_drift">Дрифт</div><div class="howto-row-desc" data-i18n="howto_drift_desc">Смени полосу удерживая тормоз — машина пойдёт в занос</div><div class="howto-row-bonus" data-i18n="howto_drift_bonus">+0.5 комбо-множитель</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🔥</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_fever">Fever Mode</div><div class="howto-row-desc" data-i18n="howto_fever_desc">Совершай near-miss обгоны (пролетай рядом с машинами) 5 раз подряд</div><div class="howto-row-bonus" data-i18n="howto_fever_bonus">×2 монеты на 12 секунд</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">💨</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_slip">Слипстрим</div><div class="howto-row-desc" data-i18n="howto_slip_desc">Езди вплотную за машиной — получаешь небольшое ускорение в потоке</div><div class="howto-row-bonus" data-i18n="howto_slip_bonus">×1.15 скорость</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">✖️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_combo">Комбо</div><div class="howto-row-desc" data-i18n="howto_combo_desc">Обгоняй и дрифтуй без столкновений — растёт множитель монет</div><div class="howto-row-bonus" data-i18n="howto_combo_bonus">до ×5 монет</div></div></div>
           </div>
 
           <div class="howto-section">
-            <div class="howto-section-title">Режимы игры</div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🛣️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Классический</div>
-                <div class="howto-row-desc">3 полосы. Бесконечная трасса — покажи рекорд дистанции!</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🏎️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Шоссе</div>
-                <div class="howto-row-desc">5 полос, плотный трафик. Хаос на шоссе!</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🏙️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Переулок</div>
-                <div class="howto-row-desc">Только 2 полосы. Экстремальная точность!</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">⏱️</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">На время</div>
-                <div class="howto-row-desc">3 полосы. Максимум дистанции за 60 секунд!</div>
-              </div>
-            </div>
-            <div class="howto-row">
-              <div class="howto-row-icon">🚗</div>
-              <div class="howto-row-content">
-                <div class="howto-row-name">Трафик Раш</div>
-                <div class="howto-row-desc">4 полосы, максимальный трафик — обгоняй всех!</div>
-              </div>
-            </div>
+            <div class="howto-section-title" data-i18n="howto_modes">Режимы игры</div>
+            <div class="howto-row"><div class="howto-row-icon">🛣️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_classic">Классический</div><div class="howto-row-desc" data-i18n="howto_classic_desc">3 полосы. Бесконечная трасса — покажи рекорд дистанции!</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🏎️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_highway">Шоссе</div><div class="howto-row-desc" data-i18n="howto_highway_desc">5 полос, плотный трафик. Хаос на шоссе!</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🏙️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_alley">Переулок</div><div class="howto-row-desc" data-i18n="howto_alley_desc">Только 2 полосы. Экстремальная точность!</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">⏱️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_time">На время</div><div class="howto-row-desc" data-i18n="howto_time_desc">3 полосы. Максимум дистанции за 60 секунд!</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🚗</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_rush">Трафик Раш</div><div class="howto-row-desc" data-i18n="howto_rush_desc">4 полосы, максимальный трафик — обгоняй всех!</div></div></div>
           </div>
 
         </div>
       </div>
     </div>
 
+    <!-- Заглушка ландшафтной ориентации -->
+    <div class="rotate-placeholder" id="rotate-placeholder">
+      <div class="rotate-icon">📱</div>
+      <div class="rotate-text" data-i18n="rotate_device">Поверните устройство вертикально</div>
+    </div>
+
   </div>
 
   <!-- Скрипты в порядке зависимостей -->
+  <script src="src/lang.js"></script>
   <script src="src/config.js"></script>
   <script src="src/game.js"></script>
   <script src="src/render.js"></script>
