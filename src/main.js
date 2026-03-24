@@ -893,18 +893,8 @@
         Game._lastRewardCoins = coins;
         updateGameOverUI({ distance: distance, coins: coins, overtakes: Game.overtakes });
 
-        // Interstitial каждые 3 заезда (с паузой — требование Яндекс Игр)
         _runCount += 1;
-        if (_runCount % 3 === 0) {
-          YandexSDK.showInterstitial(
-            function () { YandexSDK.gameplayStop(); },
-            function () {
-              showScreen('screen-gameover');
-            }
-          );
-        } else {
-          showScreen('screen-gameover');
-        }
+        showScreen('screen-gameover');
 
         var block = document.getElementById('rewarded-block');
         if (block) block.style.display = 'block';
