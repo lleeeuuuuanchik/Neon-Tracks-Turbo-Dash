@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Neon Tracks: Turbo Dash</title>
+  <title>Неоновые Трассы: Турбо-Рывок</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -15,8 +15,17 @@
 <body>
   <div id="app">
 
+    <!-- Экран загрузки -->
+    <div class="screen active" id="screen-loading">
+      <div class="loading-layout">
+        <h1 class="game-title">Неоновые Трассы: Турбо-Рывок</h1>
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Загрузка...</div>
+      </div>
+    </div>
+
     <!-- Главное меню -->
-    <div class="screen active" id="screen-menu">
+    <div class="screen" id="screen-menu">
       <div class="menu-bg-particles" aria-hidden="true"></div>
       <div class="menu-layout">
         <header class="menu-header" id="menu-header">
@@ -31,7 +40,7 @@
           <div class="menu-car-name" id="menu-car-name"></div>
           <div class="menu-stats-row">
             <div class="menu-stat-chip">
-              <span class="menu-stat-chip-label" data-i18n="lvl">LVL</span>
+              <span class="menu-stat-chip-label" data-i18n="lvl">УР</span>
               <span class="menu-stat-chip-value menu-level-badge" id="player-level">1</span>
             </div>
             <div class="menu-stat-chip chip-coins">
@@ -44,7 +53,7 @@
             </div>
           </div>
           <div class="menu-exp-row">
-            <span class="menu-exp-label">EXP</span>
+            <span class="menu-exp-label" data-i18n="exp">ОПЫТ</span>
             <div class="stat-bar">
               <div class="stat-bar-fill" id="exp-bar"></div>
             </div>
@@ -64,7 +73,7 @@
           </button>
           <button class="btn btn-secondary menu-btn-garage" id="btn-shop" data-i18n="garage">Гараж</button>
           <button class="btn btn-secondary" id="btn-howto" data-i18n="how_to_play">Как играть</button>
-          <button class="lang-toggle" id="btn-lang" title="Language">
+          <button class="lang-toggle" id="btn-lang" title="Язык">
             <span class="lang-flag" id="lang-flag">🇷🇺</span>
             <span class="lang-code" id="lang-code">RU</span>
           </button>
@@ -158,7 +167,7 @@
             <span class="hud-timer-label" data-i18n="hud_time">Время:</span>
             <span class="hud-timer-value" id="hud-timer">60</span>
           </div>
-          <div class="hud-fever-row" id="hud-fever" style="display:none">FEVER x2</div>
+          <div class="hud-fever-row" id="hud-fever" style="display:none" data-i18n="fever_hud_short">ЖАРА x2</div>
         </div>
 
         <div class="game-canvas-wrap">
@@ -268,7 +277,7 @@
           <div class="howto-section">
             <div class="howto-section-title" data-i18n="howto_mechanics">Механики</div>
             <div class="howto-row"><div class="howto-row-icon">🌀</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_drift">Дрифт</div><div class="howto-row-desc" data-i18n="howto_drift_desc">Смени полосу удерживая тормоз — машина пойдёт в занос</div><div class="howto-row-bonus" data-i18n="howto_drift_bonus">+0.5 комбо-множитель</div></div></div>
-            <div class="howto-row"><div class="howto-row-icon">🔥</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_fever">Fever Mode</div><div class="howto-row-desc" data-i18n="howto_fever_desc">Совершай near-miss обгоны (пролетай рядом с машинами) 5 раз подряд</div><div class="howto-row-bonus" data-i18n="howto_fever_bonus">×2 монеты на 12 секунд</div></div></div>
+            <div class="howto-row"><div class="howto-row-icon">🔥</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_fever">Режим Жара</div><div class="howto-row-desc" data-i18n="howto_fever_desc">Совершай рискованные обгоны (пролетай рядом с машинами) 5 раз подряд</div><div class="howto-row-bonus" data-i18n="howto_fever_bonus">×2 монеты на 12 секунд</div></div></div>
             <div class="howto-row"><div class="howto-row-icon">💨</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_slip">Слипстрим</div><div class="howto-row-desc" data-i18n="howto_slip_desc">Езди вплотную за машиной — получаешь небольшое ускорение в потоке</div><div class="howto-row-bonus" data-i18n="howto_slip_bonus">×1.15 скорость</div></div></div>
             <div class="howto-row"><div class="howto-row-icon">✖️</div><div class="howto-row-content"><div class="howto-row-name" data-i18n="howto_combo">Комбо</div><div class="howto-row-desc" data-i18n="howto_combo_desc">Обгоняй и дрифтуй без столкновений — растёт множитель монет</div><div class="howto-row-bonus" data-i18n="howto_combo_bonus">до ×5 монет</div></div></div>
           </div>

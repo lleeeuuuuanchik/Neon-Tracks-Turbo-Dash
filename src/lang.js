@@ -12,7 +12,8 @@ var LANG = {
 
       // Меню
       car_alt: 'Машина',
-      lvl: 'LVL',
+      lvl: 'УР',
+      exp: 'ОПЫТ',
       coins: 'Монеты',
       record: 'Рекорд',
       daily_quests: 'Задания дня',
@@ -85,7 +86,8 @@ var LANG = {
       quest_overtakes: 'Рискованных обгонов: {0}',
 
       // Fever
-      fever_hud: 'FEVER x2 ({0}с)',
+      fever_hud: 'ЖАРА x2 ({0}с)',
+      fever_hud_short: 'ЖАРА x2',
 
       // Canvas (render.js)
       dmg_armor: 'брн',
@@ -156,8 +158,8 @@ var LANG = {
       howto_drift: 'Дрифт',
       howto_drift_desc: 'Смени полосу удерживая тормоз — машина пойдёт в занос',
       howto_drift_bonus: '+0.5 комбо-множитель',
-      howto_fever: 'Fever Mode',
-      howto_fever_desc: 'Совершай near-miss обгоны (пролетай рядом с машинами) 5 раз подряд',
+      howto_fever: 'Режим Жара',
+      howto_fever_desc: 'Совершай рискованные обгоны (пролетай рядом с машинами) 5 раз подряд',
       howto_fever_bonus: '×2 монеты на 12 секунд',
       howto_slip: 'Слипстрим',
       howto_slip_desc: 'Езди вплотную за машиной — получаешь небольшое ускорение в потоке',
@@ -183,6 +185,7 @@ var LANG = {
 
       car_alt: 'Car',
       lvl: 'LVL',
+      exp: 'EXP',
       coins: 'Coins',
       record: 'Record',
       daily_quests: 'Daily Quests',
@@ -246,6 +249,7 @@ var LANG = {
       quest_overtakes: 'Close overtakes: {0}',
 
       fever_hud: 'FEVER x2 ({0}s)',
+      fever_hud_short: 'FEVER x2',
 
       dmg_armor: 'arm',
       pickup_shield: '+Shield',

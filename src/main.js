@@ -550,16 +550,49 @@
   // === Инициализация ===
   function init() {
     Progress.load();
-    showScreen('screen-menu');
-    updateMenuUI();
 
-    YandexSDK.init(function () {
-      LANG.setLang(YandexSDK.lang);
+    // Показываем экран загрузки, меню скрыто
+    showScreen('screen-loading');
+
+    // Флаги готовности: SDK инициализирован + все ресурсы загружены
+    var _sdkReady = false;
+    var _assetsReady = false;
+
+    function onFullyReady() {
+      // Язык уже определён через SDK — применяем локализацию
       LANG.applyToDOM();
       updateLangToggleUI();
       updateMenuUI();
+
+      // Переключаемся с загрузки на меню
+      showScreen('screen-menu');
+
+      // Сообщаем платформе: игра загружена и готова к взаимодействию
       YandexSDK.notifyReady();
+    }
+
+    function tryReady() {
+      if (_sdkReady && _assetsReady) {
+        onFullyReady();
+      }
+    }
+
+    YandexSDK.init(function () {
+      // Автоопределение языка через SDK (п. 2.14) — до показа меню
+      LANG.setLang(YandexSDK.lang);
+      _sdkReady = true;
+      tryReady();
     });
+
+    // Ждём загрузки всех ресурсов (изображения, шрифты)
+    if (document.readyState === 'complete') {
+      _assetsReady = true;
+    } else {
+      window.addEventListener('load', function () {
+        _assetsReady = true;
+        tryReady();
+      });
+    }
 
     // Переключатель языка
     var btnLang = document.getElementById('btn-lang');
