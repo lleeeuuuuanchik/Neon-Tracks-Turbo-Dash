@@ -84,8 +84,8 @@ var Render = {
   _rebuildGeo: function () {
     var WW = CONFIG.WORLD_WIDTH;
     var WH = CONFIG.WORLD_HEIGHT;
-    var roadWidth = WW * 0.72;
-    var roadX = (WW - roadWidth) / 2;   // ~50px обочина
+    var roadWidth = WW * (CONFIG.ROAD_WIDTH_RATIO || 0.40);
+    var roadX = (WW - roadWidth) / 2;   // широкая обочина для сценери
 
     this._geo = {
       WW: WW,

@@ -8,6 +8,8 @@
   var _lastArmorMax = -1;
   var _lastArmor = -1;
   var _currentModeId = null;
+  var _continueUsed = false;    // Продолжение гонки — один раз за заезд
+  var _freeUpgradeUsed = false; // Бесплатный апгрейд — один раз за сессию
   // Кэш DOM-элементов HUD (заполняется при старте игры)
   var _hudEls = null;
 
@@ -808,6 +810,62 @@
       });
     }
 
+    // Продолжить гонку за рекламу
+    var btnContinue = document.getElementById('btn-continue');
+    if (btnContinue) {
+      btnContinue.addEventListener('click', function () {
+        if (_continueUsed) return;
+        _continueUsed = true;
+        btnContinue.style.display = 'none';
+        YandexSDK.showRewarded(
+          function () {
+            Game.player.armor = Game.player.armorMax;
+            Game.state = 'running';
+            YandexSDK.gameplayStart();
+            showScreen('screen-game');
+            _animFrameId = requestAnimationFrame(_gameLoop);
+          },
+          function () {},
+          function () {},
+          function () {}
+        );
+      });
+    }
+
+    // Бесплатный апгрейд за рекламу (один раз за сессию)
+    var btnFreeUpgrade = document.getElementById('btn-free-upgrade');
+    if (btnFreeUpgrade) {
+      btnFreeUpgrade.addEventListener('click', function () {
+        if (_freeUpgradeUsed) return;
+        YandexSDK.showRewarded(
+          function () {
+            var selectedId = Progress.get('selectedCarId');
+            var stats = CONFIG.UPGRADES.stats;
+            var maxLevel = CONFIG.UPGRADES.maxLevel;
+            for (var s = 0; s < stats.length; s++) {
+              var stat = stats[s];
+              var level = Progress.getCarUpgradeLevel(selectedId, stat);
+              if (level < maxLevel) {
+                var cost = Progress.getUpgradeCost(selectedId, stat);
+                var coins = Progress.get('coins');
+                Progress.set('coins', coins + cost);
+                Progress.upgradeCarStat(selectedId, stat);
+                Progress.set('coins', coins);
+                break;
+              }
+            }
+            _freeUpgradeUsed = true;
+            var freeBlock = document.getElementById('free-upgrade-block');
+            if (freeBlock) freeBlock.style.display = 'none';
+            updateShopUI();
+          },
+          function () {},
+          function () {},
+          function () {}
+        );
+      });
+    }
+
     // Туториал
     var btnCloseTutorial = document.getElementById('btn-close-tutorial');
     if (btnCloseTutorial) {
@@ -875,6 +933,7 @@
 
   function startGame(modeId) {
     _currentModeId = modeId;
+    _continueUsed = false;
 
     showScreen('screen-game');
     Game.init();
@@ -930,7 +989,9 @@
         showScreen('screen-gameover');
 
         var block = document.getElementById('rewarded-block');
-        if (block) block.style.display = 'block';
+        if (block) block.style.display = 'flex';
+        var btnContinue = document.getElementById('btn-continue');
+        if (btnContinue) btnContinue.style.display = _continueUsed ? 'none' : 'flex';
         updateMenuUI();
       }
     };

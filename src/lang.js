@@ -9,6 +9,7 @@ var LANG = {
     ru: {
       // Название
       game_title: 'Неоновые Трассы: Турбо-Рывок',
+      eyebrow_label: 'Нео-трассы · Аркада',
 
       // Меню
       car_alt: 'Машина',
@@ -57,9 +58,14 @@ var LANG = {
       get_bonus: 'Получить бонус',
       race_again: 'Ещё заезд',
       to_garage: 'В гараж',
+      continue_race: 'Продолжить гонку',
+      continue_race_text: 'Восстановить броню и продолжить',
+      free_upgrade: 'Бесплатный апгрейд',
+      free_upgrade_text: '+1 уровень любого параметра',
+      free_upgrade_btn: 'Смотреть',
 
       // Ориентация
-      rotate_device: 'Поверните устройство вертикально',
+      rotate_device: 'Поверните устройство горизонтально',
 
       // Магазин
       selected: 'Выбрано',
@@ -182,6 +188,7 @@ var LANG = {
 
     en: {
       game_title: 'Neon Tracks: Turbo Dash',
+      eyebrow_label: 'Neon Tracks · Arcade',
 
       car_alt: 'Car',
       lvl: 'LVL',
@@ -225,8 +232,13 @@ var LANG = {
       get_bonus: 'Get Bonus',
       race_again: 'Race Again',
       to_garage: 'To Garage',
+      continue_race: 'Continue Race',
+      continue_race_text: 'Restore armor and keep going',
+      free_upgrade: 'Free Upgrade',
+      free_upgrade_text: '+1 level for any stat',
+      free_upgrade_btn: 'Watch',
 
-      rotate_device: 'Please rotate your device to portrait',
+      rotate_device: 'Please rotate your device to landscape',
 
       selected: 'Selected',
       select: 'Select',

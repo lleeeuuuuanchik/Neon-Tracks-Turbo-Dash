@@ -128,7 +128,7 @@ var Game = {
   },
 
   _computeRoadBounds: function () {
-    var roadWidth = CONFIG.WORLD_WIDTH * 0.72;
+    var roadWidth = CONFIG.WORLD_WIDTH * (CONFIG.ROAD_WIDTH_RATIO || 0.40);
     var roadX = (CONFIG.WORLD_WIDTH - roadWidth) / 2;
     this._roadBounds = { roadX: roadX, roadWidth: roadWidth };
   },
@@ -166,7 +166,7 @@ var Game = {
     this.player.carId = starter.id;
     this.player.sprite = starter.sprite;
     this.player.lane = Math.floor(this.laneCountCurrent / 2);
-    this.player.y = CONFIG.WORLD_HEIGHT - 140;
+    this.player.y = CONFIG.WORLD_HEIGHT - 80;
     this.player.baseSpeed = CONFIG.PLAYER_BASE_SPEED * stats.speed;
     this.player.maxSpeed = CONFIG.PLAYER_MAX_SPEED * stats.speed;
     this.player.speed = this.player.baseSpeed;
@@ -629,8 +629,8 @@ var Game = {
     this.decorations.push({
       x: x,
       y: -40 - Math.random() * 40,
-      width: 26 + Math.random() * 10,
-      height: 120 + Math.random() * 80,
+      width: 70 + Math.random() * 40,
+      height: 220 + Math.random() * 130,
       colorVariant: Math.floor(Math.random() * 3),
       windowRows: rows,
       windowCols: cols,

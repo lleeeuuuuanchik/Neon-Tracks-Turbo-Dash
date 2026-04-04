@@ -7,9 +7,12 @@ var CONFIG = {
   GAME_ID: 'neon_tracks_turbo_dash',
   TARGET_FPS: 60,
 
-  // Внутренние размеры игрового поля (логические, до масштабирования)
-  WORLD_WIDTH: 360,
-  WORLD_HEIGHT: 640,
+  // Внутренние размеры игрового поля (логические, до масштабирования) — 16:9 горизонталь
+  WORLD_WIDTH: 640,
+  WORLD_HEIGHT: 360,
+
+  // Доля ширины мира, занятая дорогой (синхронизировано между game.js и render.js)
+  ROAD_WIDTH_RATIO: 0.40,
 
   // Полосы движения
   LANE_COUNT: 3, // Базовое кол-во (для режимов без явного laneCount)
@@ -42,8 +45,8 @@ var CONFIG = {
   LEVEL_EXP_MULTIPLIER: 1.3,
 
   // Трафик и препятствия
-  TRAFFIC_START_DENSITY: 0.6,
-  TRAFFIC_MAX_DENSITY: 2.2,
+  TRAFFIC_START_DENSITY: 0.42,
+  TRAFFIC_MAX_DENSITY: 1.54,
   TRAFFIC_DENSITY_DISTANCE_FACTOR: 0.00025,
   OBSTACLE_SPAWN_BASE_INTERVAL: 1.4,
   OBSTACLE_SPAWN_MIN_INTERVAL: 0.5,
@@ -94,8 +97,8 @@ var CONFIG = {
       description: '5 полос, плотный трафик. Хаос на шоссе!',
       icon: '🏎️',
       laneCount: 5,
-      startDensity: 1.2,
-      maxDensity: 3.0,
+      startDensity: 0.84,
+      maxDensity: 2.1,
     },
     alley: {
       id: 'alley',
@@ -118,8 +121,8 @@ var CONFIG = {
       description: '4 полосы, максимальный трафик — обгоняй всех!',
       icon: '🚗',
       laneCount: 4,
-      startDensity: 1.5,
-      maxDensity: 3.5,
+      startDensity: 1.05,
+      maxDensity: 2.45,
     },
   },
 
