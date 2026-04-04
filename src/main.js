@@ -699,8 +699,7 @@
     var btnRestart = document.getElementById('btn-restart');
     if (btnRestart) {
       btnRestart.addEventListener('click', function () {
-        showScreen('screen-modes');
-        updateModesUI();
+        startGame(_currentModeId || 'classic');
       });
     }
 

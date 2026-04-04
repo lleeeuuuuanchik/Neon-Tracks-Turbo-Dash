@@ -70,7 +70,7 @@ var YandexSDK = {
    */
   showRewarded: function (onSuccess, onError, onOpen, onClose) {
     if (!this.ysdk) {
-      if (onError) onError();
+      if (onSuccess) onSuccess();
       return;
     }
     this.ysdk.adv.showRewardedVideo({
